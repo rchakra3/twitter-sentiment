@@ -1,0 +1,35 @@
+extends layout
+
+mixin metric(id)
+  div(class="panel panel-default",id="#{id}--display")
+    if title
+      div.panel-heading: h3.panel-title=id
+    div(class="panel-body metric")
+      h1(id="#{id}--datafield")="TBD"
+
+
+
+block content
+  //h1= title
+  //p Welcome to #{title}
+  div(class="container")
+    div.page-header.h1: Twitter Sentiment Analysis (KID level-IS THERE LOVE?)
+    div(class="row")
+      div(class="col-lg-3")
+        +metric("Love")
+      div(class="col-lg-3")
+        +metric("Hate")
+      div(class="col-lg-3")
+        +metric("Total_Tweets")
+    div(class="row")
+      div(class="tweet-table-div")
+        table(id="tweet-table" class="table table-bordered")
+          tr(class="tweet-table-header")
+            td Handle
+            td Tweet
+
+block scripts
+  script(src='javascripts/jquery.min.js')
+  script(src='/socket.io/socket.io.js')
+  script(src='/javascripts/client.socket.io.js')
+  script(src='/javascripts/bootstrap.min.js')
