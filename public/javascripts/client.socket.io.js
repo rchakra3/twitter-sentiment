@@ -20,7 +20,8 @@ function updateTable(username,tweet){
 	  	.append($('<td>')
 	  		.text(username))
 	  	.append($('<td>')
-	  		.text(decodeURIComponent(escape(tweet))))
+	  		//.text(decodeURIComponent(escape(tweet))))
+	  		.text(tweet))
 	  	)
 }
 

@@ -61,33 +61,35 @@ app.use(function(err, req, res, next) {
 });
 
 //create a server which listens on port 3000
-var server=require('http').createServer(app);
+var server=require('http').Server(app);
+//var server=require('express').createServer()
 var port=3000;
-server.listen(port);
 
 //create Websockets socket.io server object. Attach it to http server
-var sio=require('socket.io').listen(server);
+var sio=require('socket.io')(server);
+server.listen(port);
 
 var stream=twit.stream('statuses/filter', { track: ['love','hate']/*,language: 'en'*/});
 
 
 //define behavior on connection with web-client
 
-sio.sockets.on('connection',function(socket){
+//sio.sockets.on('connection',function(socket){
 
-    console.log("going_into_stream_on");
+//    console.log("going_into_stream_on");
     stream.on('tweet',function(tweet) {
+    
    
-    if(tweet.text.toLowerCase().indexOf("love")>-1)
-        socket.emit('new-tweet',{type:"love", username: tweet.user.screen_name, text: tweet.text});
-    if(tweet.text.toLowerCase().indexOf("hate")>-1)
-        socket.emit('new-tweet',{type:"hate",username: tweet.user.screen_name, text: tweet.text});
+        if(tweet.text.toLowerCase().indexOf("love")>-1)
+            sio.sockets.emit('new-tweet',{type:"love", username: tweet.user.screen_name, text: tweet.text});
+        if(tweet.text.toLowerCase().indexOf("hate")>-1)
+            sio.sockets.emit('new-tweet',{type:"hate",username: tweet.user.screen_name, text: tweet.text});
 
     //console.log("tweet sent");
     });
-    console.log("out_of_stream_on");
+//    console.log("out_of_stream_on");
 
-});
+//});
 
 
 
