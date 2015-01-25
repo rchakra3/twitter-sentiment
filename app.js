@@ -68,10 +68,12 @@ server.listen(port);
 //create Websockets socket.io server object. Attach it to http server
 var sio=require('socket.io').listen(server);
 
+var stream=twit.stream('statuses/filter', { track: ['love','hate']/*,language: 'en'*/});
+
+
 //define behavior on connection with web-client
 
 sio.sockets.on('connection',function(socket){
-    var stream=twit.stream('statuses/filter', { track: ['love','hate']/*,language: 'en'*/});
 
     console.log("going_into_stream_on");
     stream.on('tweet',function(tweet) {
