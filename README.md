@@ -2,5 +2,8 @@
 
 Graphical Interface and added functionality coming up!
 
-git clone "https://github.com/rchakra3/twitter-sentiment"
+Instructions:
 
+git clone "https://github.com/rchakra3/twitter-sentiment"
+cd twitter-sentiment
+npm install --save
