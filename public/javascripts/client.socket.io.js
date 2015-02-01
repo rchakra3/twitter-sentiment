@@ -1,39 +1,29 @@
-var server_name="http://localhost:3000/";
+var server_name="http://127.0.0.1:3000/";
 var socket=io.connect(server_name);
-var loveDisplay=document.getElementById('Love--display');
-var hateDisplay=document.getElementById('Hate--display');
-var twitterHandle=document.getElementById('Twitter-Handle--display');
-var tweetDisplay=document.getElementById('Tweet--display')
 
-var love_count=0;
-var hate_count=0;
 
-function updateValues(love_count,hate_count){
-	$("#Love--display").find("#Love--datafield").text((love_count/(love_count+hate_count))*100);
-	$("#Hate--display").find("#Hate--datafield").text((hate_count/(love_count+hate_count))*100);
-	$("#Total_Tweets--display").find("#Total_Tweets--datafield").text(love_count+hate_count);
+
+
+function updateValues(love_perc,hate_perc,total_count){
+	$("#Love_Percentage--display").find("#Love_Percentage--datafield").text(love_perc);
+	$("#Hate_Percentage--display").find("#Hate_Percentage--datafield").text(hate_perc);
+	$("#Total_Tweets--display").find("#Total_Tweets--datafield").text(total_count);
 }
 
-function updateTable(username,tweet){
+function addTweet(username,tweet){
 	$("#tweet-table").find('tbody')
 	  .prepend($('<tr>')
-	  	.append($('<td>')
+	  	.append($('<td class=\'col-lg-2\'>')
 	  		.text(username))
-	  	.append($('<td>')
+	  	.append($('<td class=\'col-lg-7\'>')
 	  		//.text(decodeURIComponent(escape(tweet))))
 	  		.text(tweet))
 	  	)
+	  .children('tr').slice(10).remove();
 }
 
 socket.on('new-tweet',function(data){
 
-	console.log("new Tweet!")
-	if(data.type=="love"){
-		love_count++;
-	}
-	else{
-		hate_count++;
-	}
-	updateValues(love_count,hate_count);
-	updateTable(data.username,data.text);
+	updateValues(data.love_perc,data.hate_perc,data.tweet_count);
+	addTweet(data.username,data.text);
 });

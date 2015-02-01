@@ -69,29 +69,26 @@ var port=3000;
 var sio=require('socket.io')(server);
 server.listen(port);
 
-var stream=twit.stream('statuses/filter', { track: ['love','hate']/*,language: 'en'*/});
+var stream=twit.stream('statuses/filter', { track: ['love','hate'],language: 'en'});
+var love_count=0,hate_count=0;
 
-
-//define behavior on connection with web-client
-
-//sio.sockets.on('connection',function(socket){
-
-//    console.log("going_into_stream_on");
+//define behavior on receiving a tweet
     stream.on('tweet',function(tweet) {
     
    
         if(tweet.text.toLowerCase().indexOf("love")>-1)
-            sio.sockets.emit('new-tweet',{type:"love", username: tweet.user.screen_name, text: tweet.text});
+            love_count++;
+          
         if(tweet.text.toLowerCase().indexOf("hate")>-1)
-            sio.sockets.emit('new-tweet',{type:"hate",username: tweet.user.screen_name, text: tweet.text});
+            hate_count++;
+    
+        var total_tweets= love_count+hate_count;
 
-    //console.log("tweet sent");
+        var love_perc= (love_count/total_tweets)*100;
+        var hate_perc= (hate_count/total_tweets)*100;
+
+        sio.sockets.emit('new-tweet',{username: tweet.user.screen_name, text: tweet.text, love_perc: love_perc.toFixed(2), hate_perc: hate_perc.toFixed(2),tweet_count:total_tweets});
     });
-//    console.log("out_of_stream_on");
-
-//});
-
-
 
 
 module.exports = app;
