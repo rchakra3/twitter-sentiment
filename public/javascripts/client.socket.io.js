@@ -19,7 +19,7 @@ function addTweet(username,tweet){
 	  		//.text(decodeURIComponent(escape(tweet))))
 	  		.text(tweet))
 	  	)
-	  .children('tr').slice(10).remove();
+	  .children('tr').slice(50).remove();
 }
 
 socket.on('new-tweet',function(data){
